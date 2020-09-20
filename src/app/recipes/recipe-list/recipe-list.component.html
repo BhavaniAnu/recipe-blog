@@ -1,0 +1,19 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="recipes.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let recipe of recipes">
+    <mat-expansion-panel-header>
+      {{ recipe.title }}
+    </mat-expansion-panel-header>
+    <div class="recipe-image">
+      <img [src]="recipe.imagePath" [alt]="recipe.title">
+    </div>
+    <p>{{ recipe.content }}</p>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === recipe.creator">
+      <a mat-button color="primary" [routerLink]="['/edit', recipe.id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(recipe.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-paginator [length]="totalRecipes" [pageSize]="recipesPerPage" [pageSizeOptions]="pageSizeOptions"
+(page)="onChangedPage($event)" *ngIf="recipes.length > 0"></mat-paginator>
+<p class="info-text mat-body-1" *ngIf="recipes.length <= 0 && !isLoading">No recipes added yet!</p>
